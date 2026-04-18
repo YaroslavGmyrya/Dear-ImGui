@@ -11,7 +11,6 @@ set(IMGUI
     dependencies/imgui/imgui_tables.cpp
     dependencies/imgui/imgui_widgets.cpp
     dependencies/imgui/imgui_demo.cpp
-
 )
 
 if(APPLE)
@@ -39,28 +38,29 @@ target_link_libraries(main PRIVATE
 )
 
 elseif(UNIX)
-    find_package(SDL2 REQUIRED)
-    find_package(OpenGL REQUIRED)
-    find_package(GLEW REQUIRED)
-
-    set(DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/dependencies)
-
-
-    add_library(imgui STATIC
-    ${IMGUI}
-    ${DEPENDENCIES_DIR}/imgui/backends/imgui_impl_sdl2.cpp
-    ${DEPENDENCIES_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+    add_executable(main
+        src/linux.cpp
+        ${IMGUI}
+        dependencies/imgui/backends/imgui_impl_sdl2.cpp
+        dependencies/imgui/backends/imgui_impl_opengl3.cpp
     )
 
-    target_include_directories(imgui PUBLIC
+    find_package(SDL2 REQUIRED)
+    find_package(OpenGL REQUIRED)
+
+    target_link_libraries(main PRIVATE
+        SDL2::SDL2
+        OpenGL::GL
+    )
+
+    target_include_directories(main PUBLIC
         ${DEPENDENCIES_DIR}/imgui
         ${DEPENDENCIES_DIR}/imgui/backends
     )
 
-    target_link_libraries(imgui PUBLIC
+    target_link_libraries(main PUBLIC
         SDL2::SDL2
         OpenGL::GL
-        GLEW::GLEW
     )
 endif()
 
