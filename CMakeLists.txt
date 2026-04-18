@@ -33,9 +33,11 @@ add_executable(main
     src/macOS.mm
 )
 
-target_include_directories(main
-    PRIVATE
-    dependencies
+target_include_directories(main PUBLIC
+    dependencies/imgui
+    dependencies/imgui/backends
+    dependencies/implot
+
 )
 
 target_link_libraries(main PRIVATE
@@ -45,6 +47,10 @@ target_link_libraries(main PRIVATE
     "-framework QuartzCore"
     "-framework AppKit"
     objc
+)
+
+target_link_libraries(main
+    glfw
 )
 
 elseif(UNIX)
@@ -63,6 +69,7 @@ elseif(UNIX)
     target_include_directories(main PUBLIC
         dependencies/imgui
         dependencies/imgui/backends
+        dependencies/implot
     )
 
     target_link_libraries(main PUBLIC
