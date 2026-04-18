@@ -22,6 +22,7 @@ set(IMPLOT
 )
 
 if(APPLE)
+find_package(glfw3 REQUIRED)
 
 add_executable(main
     ${IMGUI}
@@ -34,14 +35,15 @@ add_executable(main
 )
 
 target_include_directories(main PUBLIC
+    dependencies
     dependencies/imgui
     dependencies/imgui/backends
     dependencies/implot
+    dependencies/backend
 
 )
 
 target_link_libraries(main PRIVATE
-    glfw
     "-framework Metal"
     "-framework Foundation"
     "-framework QuartzCore"
@@ -49,9 +51,7 @@ target_link_libraries(main PRIVATE
     objc
 )
 
-target_link_libraries(main
-    glfw
-)
+target_link_libraries(main PRIVATE glfw)
 
 elseif(UNIX)
     add_executable(main
