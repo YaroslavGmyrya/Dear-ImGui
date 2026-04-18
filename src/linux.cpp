@@ -6,15 +6,17 @@
 #include <thread>
 #include <cmath>
 
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_sdl2.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_sdl2.h"
 #include "imgui.h"
+#include "../dependencies/implot/implot.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
     // 1) Инициализация SDL
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-    SDL_Window* window = SDL_CreateWindow(
+    SDL_Window *window = SDL_CreateWindow(
         "Backend start", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     SDL_GLContext gl_context = SDL_GL_CreateContext(window);
@@ -24,10 +26,11 @@ int main(int argc, char *argv[]) {
     ImPlot::CreateContext();
 
     // Ввод\вывод
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Включить Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Включить Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Включить Docking
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Включить Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Включить Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Включить Docking
 
     // 2.1) Привязка Imgui к SDL2 и OpenGl backend'ам
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
@@ -35,14 +38,17 @@ int main(int argc, char *argv[]) {
 
     // 3) Игра началась
     bool running = true;
-    while (running) {
+    while (running)
+    {
 
         // 3.0) Обработка event'ов (inputs, window resize, mouse moving, etc.);
         SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            std::cout << "Processing some event: "<< event.type << std::endl;
+        while (SDL_PollEvent(&event))
+        {
+            std::cout << "Processing some event: " << event.type << std::endl;
             ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT) {
+            if (event.type == SDL_QUIT)
+            {
                 running = false;
             }
         }
@@ -53,17 +59,18 @@ int main(int argc, char *argv[]) {
         ImGui::NewFrame();
         ImGui::DockSpaceOverViewport(0, nullptr, ImGuiDockNodeFlags_None);
 
-
         // 3.2) Наш виджет с кнопкой;
         {
             static int counter = 0;
-            ImGui::Begin("Hello, world!"); 
-                ImGui::Text("This is some useful text.");    
-                if (ImGui::Button("Button"))                         
-                    counter++;
-                ImGui::Text("counter = %d", counter);
+            ImGui::Begin("Hello, world!");
+            ImGui::Text("This is some useful text.");
+            if (ImGui::Button("Button"))
+                counter++;
+            ImGui::Text("counter = %d", counter);
             ImGui::End();
         }
+
+        ImGui::ShowDemoWindow();
 
         // 3.3) Отправляем на рендер;
         ImGui::Render();
